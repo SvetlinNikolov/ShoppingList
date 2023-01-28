@@ -1,0 +1,32 @@
+﻿@using ShoppingList.Models.Categories
+
+@model IEnumerable<CategoryViewModel>
+
+
+<form method="get" asp-controller="Categories" asp-action="CreateCategory">
+    <button type="submit" class="btn btn-primary btn-block mb-4">Create</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var category in @Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>
+                    <form method="get" asp-controller="Categories" asp-action="CategoryDetails" asp-route-id="@category.Id">
+                        <button class="btn btn-secondary mr-2">Edit</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
