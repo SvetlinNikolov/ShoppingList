@@ -2,15 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using ShoppingList.Data;
 using ShoppingList.Data.Models;
-using ShoppingList.Models.Categories;
 using ShoppingList.Models.Products;
+using ShoppingList.Models.ProductsCategories;
 using ShoppingList.Repositories.Interfaces;
 using ShoppingList.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingList.Services
 {
@@ -19,14 +14,17 @@ namespace ShoppingList.Services
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IEntityRepository entityRepository;
+        private readonly ICategoryService categoryService;
 
         public ProductService(ApplicationDbContext dbContext,
             IMapper mapper,
-            IEntityRepository entityRepository)
+            IEntityRepository entityRepository,
+            ICategoryService categoryService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.entityRepository = entityRepository;
+            this.categoryService = categoryService;
         }
 
         public async Task<ProductViewModel> CreateProductAsync(CreateProductInputModel model)
@@ -61,7 +59,7 @@ namespace ShoppingList.Services
                 return default;
             }
 
-            var updatedProduct = this.entityRepository.EditEntityAsync(model, product);
+            var updatedProduct = await this.entityRepository.EditEntityAsync(model, product);
 
             var viewModel = this.mapper.Map<ProductViewModel>(updatedProduct);
             return viewModel;
@@ -69,17 +67,40 @@ namespace ShoppingList.Services
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
         {
-            throw new NotImplementedException();
+            var products = await this.dbContext.Products
+                .OrderBy(x => x.Id)
+                .ToListAsync();
+
+            var viewModel = this.mapper.Map<IEnumerable<ProductViewModel>>(products);
+
+            return viewModel;
         }
 
-        public async Task<ProductViewModel> GetProductViewModelByIdAsync(int id)
+        public async Task<ProductWithCategoriesViewModel> GetProductWithCategoriesViewModelByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await this.GetProductByIdAsync(id);
+
+            if (product == null)
+            {
+                return default;
+            }
+
+            var productViewModel = this.mapper.Map<ProductViewModel>(product);
+            var categoriesViewModel = await this.categoryService.GetAllCategoriesAsync();
+
+            var productAndCategoriesViewModel = new ProductWithCategoriesViewModel
+            {
+                Product = productViewModel,
+                CategoryCollection = categoriesViewModel
+            };
+
+            return productAndCategoriesViewModel;
         }
 
         private async Task<Product> GetProductByIdAsync(int id)
         {
             return await this.dbContext.Products
+                .Include(x => x.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }

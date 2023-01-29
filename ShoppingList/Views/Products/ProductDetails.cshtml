@@ -1,0 +1,24 @@
+﻿@using ShoppingList.Models.ProductsCategories
+
+@model ProductWithCategoriesViewModel
+
+<h1>Product: @Model.Product.Name</h1>
+
+<form method="post" asp-controller="Products" asp-action="EditProduct" asp-route-id="@Model.Product.Id">
+    <!-- Name input -->
+    <div class="form-outline mb-4">
+        <input type="text" class="form-control" asp-for="@Model.Product.Name" name="Name" />
+        <label class="form-label"></label>
+    </div>
+
+    <select class="form-select" aria-label="Select Category To Assign To Product" id="CategoryId" name="CategoryId">
+        <option asp-for="@Model.Product.Category.Id" value="@Model.Product.Category.Id" disabled selected>Current category is @Model.Product.Category.Name</option>
+        @foreach (var category in Model.CategoryCollection.Categories.Where(x => x.Id != Model.Product.Category.Id))
+        {
+            <option asp-for="@category.Id" value="@category.Id">@category.Name</option>
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
+
+</form>

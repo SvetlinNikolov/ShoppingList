@@ -10,6 +10,6 @@ namespace ShoppingList.Services.Interfaces
 
         Task<CategoryViewModel> GetCategoryViewModelByIdAsync(int id);
 
-        Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
+        Task<CategoryCollectionViewModel> GetAllCategoriesAsync();
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShoppingList.Services.Interfaces
+﻿namespace ShoppingList.Services.Interfaces
 {
-    internal class IShoppingListService
+    public interface IShoppingListService
     {
+        Task<ShoppingListViewModel> CreateShoppingListAsync(CreateShoppingListInputModel model);
     }
 }

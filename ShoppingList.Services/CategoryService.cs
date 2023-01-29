@@ -69,19 +69,24 @@ namespace ShoppingList.Services
                 return default;
             }
 
-            var updatedCategory = this.entityRepository.EditEntityAsync(model, category);
+            var updatedCategory = await this.entityRepository.EditEntityAsync(model, category);
 
             var viewModel = this.mapper.Map<CategoryViewModel>(updatedCategory);
             return viewModel;
         }
 
-        public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
+        public async Task<CategoryCollectionViewModel> GetAllCategoriesAsync()
         {
             var categories = await this.dbContext.Categories
                 .OrderBy(x => x.Id)
                 .ToListAsync();
 
-            var viewModel = this.mapper.Map<IEnumerable<CategoryViewModel>>(categories);
+            var categoryViewModels = this.mapper.Map<IEnumerable<CategoryViewModel>>(categories);
+
+            var viewModel = new CategoryCollectionViewModel
+            {
+                Categories = categoryViewModels
+            };
 
             return viewModel;
         }

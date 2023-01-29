@@ -1,0 +1,31 @@
+﻿@using ShoppingList.Models.Products
+
+@model IEnumerable<ProductViewModel>
+
+<form method="get" asp-controller="Products" asp-action="CreateProduct">
+    <button type="submit" class="btn btn-primary btn-block mb-4">Create</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var product in @Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>
+                    <form method="get" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
+                        <button class="btn btn-secondary mr-2">Edit</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
