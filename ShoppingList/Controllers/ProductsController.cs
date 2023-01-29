@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShoppingList.Models.Categories;
 using ShoppingList.Models.Products;
 using ShoppingList.Services.Interfaces;
@@ -6,6 +7,7 @@ using ShoppingList.Views.Shared;
 
 namespace ShoppingList.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly IProductService productService;

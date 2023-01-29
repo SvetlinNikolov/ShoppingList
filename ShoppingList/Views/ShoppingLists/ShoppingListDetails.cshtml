@@ -1,0 +1,16 @@
+﻿@using ShoppingList.Models.ShoppingLists
+
+@model ShoppingListViewModel
+
+<h1>Shopping List Name: @Model.Name</h1>
+
+<form method="post" asp-controller="ShoppingLists" asp-action="EditShoppingList" asp-route-id="@Model.Id">
+    <!-- Name input -->
+    <div class="form-outline mb-4">
+        <input type="text" class="form-control" asp-for="@Model.Name" />
+        <label class="form-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
+
+</form>

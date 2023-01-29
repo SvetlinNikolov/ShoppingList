@@ -10,7 +10,7 @@ namespace ShoppingList.Data.Models
 
         public virtual ApplicationUser User { get; set; }
 
-        //public virtual ICollection<Product> Products { get; set; }
+        public string UserId { get; set; }
 
         public virtual ICollection<ProductsBought> ProductsBought { get; set; }
     }

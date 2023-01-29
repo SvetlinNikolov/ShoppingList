@@ -292,6 +292,7 @@ namespace ShoppingList.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -386,7 +387,9 @@ namespace ShoppingList.Data.Migrations
                 {
                     b.HasOne("ShoppingList.Data.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

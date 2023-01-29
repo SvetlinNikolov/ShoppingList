@@ -1,0 +1,16 @@
+﻿@using ShoppingList.Models.ShoppingLists
+
+@model CreateShoppingListInputModel
+
+<h1>Create Shopping List</h1>
+
+<form method="post" asp-controller="ShoppingLists" asp-action="CreateShoppingList">
+    <!-- Name input -->
+    <div class="form-outline mb-4">
+        <input type="text" class="form-control" asp-for="@Model.Name" />
+        <label class="form-label">Shopping List Name</label>
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">Create</button>
+</form>

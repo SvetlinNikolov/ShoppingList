@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShoppingList.Models.Categories;
 using ShoppingList.Services.Interfaces;
 using ShoppingList.Views.Shared;
 
 namespace ShoppingList.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoryService;

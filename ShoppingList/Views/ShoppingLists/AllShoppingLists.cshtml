@@ -1,0 +1,31 @@
+﻿@using ShoppingList.Models.ShoppingLists
+
+@model ShoppingListCollectionViewModel
+
+<form method="get" asp-controller="ShoppingLists" asp-action="CreateShoppingList">
+    <button type="submit" class="btn btn-primary btn-block mb-4">Create</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Shopping List Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var list in @Model.ShoppingLists)
+        {
+            <tr>
+                <td>@list.Name</td>
+                <td>
+                    <form method="get" asp-controller="ShoppingLists" asp-action="ShoppingListDetails" asp-route-id="@list.Id">
+                        <button class="btn btn-secondary mr-2">Edit</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
