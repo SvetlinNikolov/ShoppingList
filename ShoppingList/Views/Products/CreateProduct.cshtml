@@ -11,7 +11,9 @@
         <label class="form-label">Product Name</label>
     </div>
 
+    <span class="label label-default">Chose a category for the product:</span>
     <select class="form-select" aria-label="Select Category To Assign To Product" id="" name="CategoryId">
+
         <option disabled selected>None</option>
         @foreach (var category in Model.CategoryCollection.Categories)
         {

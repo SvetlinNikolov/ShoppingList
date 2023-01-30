@@ -22,7 +22,7 @@ namespace ShoppingList.Controllers
         [HttpGet]
         public async Task<IActionResult> AllShoppingLists()
         {
-            var shoppingLists = await this.shoppingListService.GetAllShoppingListsAsync();
+            var shoppingLists = await this.shoppingListService.GetAllShoppingLists();
 
             return this.View(shoppingLists);
         }

@@ -52,7 +52,12 @@ namespace ShoppingList.Controllers
 
             if (product == null)
             {
-                return this.View("Error", new ErrorModel("Error when creating product"));
+                if (model.CategoryId == default)
+                {
+                    return this.View("Error", new ErrorModel("Cannot create product without a category. Create the category first or chose an existing one."));
+                }
+
+                return this.View("Error", new ErrorModel("Error when creating product."));
             }
 
             return this.RedirectToAction(nameof(AllProducts));
@@ -61,7 +66,7 @@ namespace ShoppingList.Controllers
         [HttpGet]
         public async Task<IActionResult> ProductDetails(int id)
         {
-            var product = await this.productService.GetProductWithCategoriesViewModelByIdAsync(id);
+            var product = await this.productService.GetProductWithCategoriesAndShoppingListsViewModelByIdAsync(id);
 
             if (product == null)
             {

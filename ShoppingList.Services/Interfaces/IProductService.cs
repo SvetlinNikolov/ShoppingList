@@ -10,7 +10,7 @@ namespace ShoppingList.Services.Interfaces
 
         Task<ProductViewModel> EditProductAsync(EditProductInputModel model);
 
-        Task<ProductWithCategoriesViewModel> GetProductWithCategoriesViewModelByIdAsync(int id);
+        Task<ProductWithCategoriesAndShoppingListsViewModel> GetProductWithCategoriesAndShoppingListsViewModelByIdAsync(int id);
 
         Task<IEnumerable<ProductViewModel>> GetAllProductsAsync();
     }

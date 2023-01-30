@@ -1,6 +1,6 @@
 ﻿@using ShoppingList.Models.ProductsCategories
 
-@model ProductWithCategoriesViewModel
+@model ProductWithCategoriesAndShoppingListsViewModel
 
 <h1>Product: @Model.Product.Name</h1>
 
@@ -11,13 +11,37 @@
         <label class="form-label"></label>
     </div>
 
-    <select class="form-select" aria-label="Select Category To Assign To Product" id="CategoryId" name="CategoryId">
-        <option asp-for="@Model.Product.Category.Id" value="@Model.Product.Category.Id" disabled selected>Current category is @Model.Product.Category.Name</option>
-        @foreach (var category in Model.CategoryCollection.Categories.Where(x => x.Id != Model.Product.Category.Id))
-        {
-            <option asp-for="@category.Id" value="@category.Id">@category.Name</option>
-        }
-    </select>
+    <h4>Categories</h4>
+
+    <div class="form-outline mb-4">
+        <select class="form-select " aria-label="Select Category To Assign To Product" id="CategoryId" name="CategoryId">
+            <option asp-for="@Model.Product.Category.Id" value="@Model.Product.Category.Id" selected>Current category is @Model.Product.Category.Name</option>
+            @foreach (var category in Model.CategoryCollection.Categories.Where(x => x.Id != Model.Product.Category.Id))
+            {
+                <option asp-for="@category.Id" value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    @if (Model.ShoppingListCollection.ShoppingLists?.Any() == true)
+    {
+        <h5>Shopping Lists</h5>
+        <p>Select in which Shopping Lists to add the product</p>
+
+        <div class="form-outline mb-4">
+            @foreach (var list in Model.ShoppingListCollection.ShoppingLists)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="@list.Id" id="@list.Id" name="ShoppingListIds">
+                    <label class="form-check-label" for="defaultCheck1">@list.Name</label>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h5>Shopping Lists are shown here after you create them.</h5>
+    }
 
     <button type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
 

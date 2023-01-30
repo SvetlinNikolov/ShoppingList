@@ -261,24 +261,6 @@ namespace ShoppingList.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ShoppingList.Data.Models.ProductsBought", b =>
-                {
-                    b.Property<int>("ShoppingListId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("ProductIsBought")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("ShoppingListId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductsBought");
-                });
-
             modelBuilder.Entity("ShoppingList.Data.Models.ShoppingList", b =>
                 {
                     b.Property<int>("Id")
@@ -300,6 +282,32 @@ namespace ShoppingList.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ShoppingLists");
+                });
+
+            modelBuilder.Entity("ShoppingList.Data.Models.ShoppingListsProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ProductIsBought")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ShoppingListId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingListId");
+
+                    b.ToTable("ShoppingListsProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,7 +372,18 @@ namespace ShoppingList.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ShoppingList.Data.Models.ProductsBought", b =>
+            modelBuilder.Entity("ShoppingList.Data.Models.ShoppingList", b =>
+                {
+                    b.HasOne("ShoppingList.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShoppingList.Data.Models.ShoppingListsProducts", b =>
                 {
                     b.HasOne("ShoppingList.Data.Models.Product", "Product")
                         .WithMany("ProductsBought")
@@ -381,17 +400,6 @@ namespace ShoppingList.Data.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ShoppingList");
-                });
-
-            modelBuilder.Entity("ShoppingList.Data.Models.ShoppingList", b =>
-                {
-                    b.HasOne("ShoppingList.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoppingList.Data.Models.Category", b =>

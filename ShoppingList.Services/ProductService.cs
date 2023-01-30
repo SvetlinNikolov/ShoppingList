@@ -15,21 +15,25 @@ namespace ShoppingList.Services
         private readonly IMapper mapper;
         private readonly IEntityRepository entityRepository;
         private readonly ICategoryService categoryService;
+        private readonly IShoppingListService shoppingListService;
 
-        public ProductService(ApplicationDbContext dbContext,
+        public ProductService(
+            ApplicationDbContext dbContext,
             IMapper mapper,
             IEntityRepository entityRepository,
-            ICategoryService categoryService)
+            ICategoryService categoryService,
+            IShoppingListService shoppingListService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
             this.entityRepository = entityRepository;
             this.categoryService = categoryService;
+            this.shoppingListService = shoppingListService;
         }
 
         public async Task<ProductViewModel> CreateProductAsync(CreateProductInputModel model)
         {
-            if (model != null && !string.IsNullOrEmpty(model.Name))
+            if (model != null && !string.IsNullOrEmpty(model.Name) && model.CategoryId != default)
             {
                 var productInDb = await this.dbContext.Products.FirstOrDefaultAsync(x => x.Name == model.Name);
 
@@ -47,7 +51,7 @@ namespace ShoppingList.Services
 
         public async Task<ProductViewModel> EditProductAsync(EditProductInputModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 return default;
             }
@@ -57,6 +61,16 @@ namespace ShoppingList.Services
             if (product == null)
             {
                 return default;
+            }
+
+            if (model.ShoppingListIds != default)
+            {
+                var successfullyAdded = await this.AddProductToShoppingList(model);
+
+                if (!successfullyAdded)
+                {
+                    return default;
+                }
             }
 
             var updatedProduct = await this.entityRepository.EditEntityAsync(model, product);
@@ -76,7 +90,7 @@ namespace ShoppingList.Services
             return viewModel;
         }
 
-        public async Task<ProductWithCategoriesViewModel> GetProductWithCategoriesViewModelByIdAsync(int id)
+        public async Task<ProductWithCategoriesAndShoppingListsViewModel> GetProductWithCategoriesAndShoppingListsViewModelByIdAsync(int id)
         {
             var product = await this.GetProductByIdAsync(id);
 
@@ -87,11 +101,13 @@ namespace ShoppingList.Services
 
             var productViewModel = this.mapper.Map<ProductViewModel>(product);
             var categoriesViewModel = await this.categoryService.GetAllCategoriesAsync();
+            var shoppingListsViewModel = await this.shoppingListService.GetAllShoppingLists();
 
-            var productAndCategoriesViewModel = new ProductWithCategoriesViewModel
+            var productAndCategoriesViewModel = new ProductWithCategoriesAndShoppingListsViewModel
             {
                 Product = productViewModel,
-                CategoryCollection = categoriesViewModel
+                CategoryCollection = categoriesViewModel,
+                ShoppingListCollection = shoppingListsViewModel,
             };
 
             return productAndCategoriesViewModel;
@@ -102,6 +118,12 @@ namespace ShoppingList.Services
             return await this.dbContext.Products
                 .Include(x => x.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        private async Task<bool> AddProductToShoppingList(EditProductInputModel model)
+        {
+            var addProductToShoppingListModel = this.mapper.Map<AddProductToShoppingListsInputModel>(model);
+            return await this.shoppingListService.AddProductToShoppingListsAsync(addProductToShoppingListModel);
         }
     }
 }

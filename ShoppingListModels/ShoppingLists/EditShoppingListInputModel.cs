@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ShoppingList.Models.Products;
 
 namespace ShoppingList.Models.ShoppingLists
 {
@@ -11,5 +7,7 @@ namespace ShoppingList.Models.ShoppingLists
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public IEnumerable<int> ProductIds { get; set; }
     }
 }

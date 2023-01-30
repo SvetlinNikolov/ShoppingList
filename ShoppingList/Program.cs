@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShoppingList.Data;
 using ShoppingList.Data.Models;
+using ShoppingList.Data.Seeding;
 using ShoppingList.Repositories;
 using ShoppingList.Repositories.Interfaces;
 using ShoppingList.Services;
@@ -19,6 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+ShoppingListDataSeeder.Seed(builder.Services.)
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();

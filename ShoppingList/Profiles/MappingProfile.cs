@@ -24,9 +24,19 @@ namespace ShoppingList.Profiles
 
             CreateMap<CreateShoppingListInputModel, ShoppingList.Data.Models.ShoppingList>();
 
-            CreateMap<ShoppingList.Data.Models.ShoppingList, ShoppingListViewModel>();
+            CreateMap<ShoppingList.Data.Models.ShoppingList, ShoppingListViewModel>()
+                .ForMember(x => x.Products, y => y.MapFrom(z => z.ShoppingListsProducts));
+
+            CreateMap<ShoppingListsProducts, ShoppingListProductViewModel>()
+                .ForMember(x => x.ProductName, y => y.MapFrom(z => z.Product.Name));
 
             CreateMap<EditShoppingListInputModel, ShoppingList.Data.Models.ShoppingList>();
+
+            CreateMap<EditProductInputModel, AddProductToShoppingListsInputModel>()
+                .ForMember(x => x.ProductId, y => y.MapFrom(z => z.Id));
+
+            CreateMap<ShoppingList.Data.Models.ShoppingListsProducts, ShoppingListProductViewModel>()
+                .ForMember(x => x.ProductName, y => y.MapFrom(z => z.Product.Name));
         }
     }
 }

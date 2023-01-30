@@ -10,6 +10,6 @@
 
         public virtual Category Category { get; set; }
 
-        public virtual ICollection<ProductsBought> ProductsBought { get; set; }
+        public virtual ICollection<ShoppingListsProducts> ProductsBought { get; set; }
     }
 }

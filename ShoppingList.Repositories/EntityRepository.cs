@@ -26,7 +26,8 @@ namespace ShoppingList.Repositories
             return newEntity;
         }
 
-        public async Task<TEntity> EditEntityAsync<TInput, TEntity>(TInput model, TEntity entity) where TEntity : class
+        public async Task<TEntity> EditEntityAsync<TInput, TEntity>(TInput model, TEntity entity)
+            where TEntity : class
         {
             this.mapper.Map(model, entity);
 

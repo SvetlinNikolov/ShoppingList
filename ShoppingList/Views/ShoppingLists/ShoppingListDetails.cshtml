@@ -11,6 +11,31 @@
         <label class="form-label"></label>
     </div>
 
+    @if (Model.Products?.Any() == true)
+    {
+        <p>Tick the products that have been bought</p>
+
+        <div class="form-outline mb-4">
+            @foreach (var product in Model.Products)
+            {
+                bool shouldDissableCheckbox = product.ProductIsBought == true ? true : false;
+
+                <div class="form-check">
+                    @if (shouldDissableCheckbox)
+                    {
+                        <input class="form-check-input @shouldDissableCheckbox" type="checkbox" value="@product.ProductId" asp-for="@product.ProductIsBought" disabled checked="@product.ProductIsBought" name="ProductIds" />
+                    }
+                    else
+                    {
+                        <input class="form-check-input @shouldDissableCheckbox" type="checkbox" value="@product.ProductId" asp-for="@product.ProductIsBought" checked="@product.ProductIsBought" name="ProductIds" />
+                    }
+
+                    <label class="form-check-label" for="defaultCheck1">@product.ProductName</label>
+                </div>
+            }
+        </div>
+    }
+
     <button type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
 
 </form>
