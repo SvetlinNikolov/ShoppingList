@@ -1,13 +1,15 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres
+    build:
+      context: ./
+      dockerfile: Dockerfile
     environment:
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=app
       - POSTGRES_DB=ShoppingListDb
     volumes:
-      - ./volumes/data/db:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
     networks:
       - slNetwork
     ports:
